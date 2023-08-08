@@ -1,7 +1,4 @@
 {
-  "functions": {
-    "source": "functions"
-  },
   "hosting": {
     "site":"crafting-ticket-dev",
     "source": ".",
