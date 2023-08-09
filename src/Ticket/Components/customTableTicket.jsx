@@ -90,6 +90,7 @@ function CustomTable({
   pages,
   disabledSearch,
   closeSearch,
+  isFetching,
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const columns = useMemo(() => columnsData, [columnsData]);
@@ -174,7 +175,6 @@ function CustomTable({
   const brandColor = useColorModeValue("table.100", "table.100");
 
   const tableShowRowOptions = pages ? pages : [10, 20, 30, 40, 50];
-  const { user } = useAppContext();
 
   const reportStatus = (status) => {
     let bg = "";
@@ -212,11 +212,11 @@ function CustomTable({
   };
 
   return (
-    <>
+    <div className="container">
       <Flex
         direction="column"
         w="100%"
-        overflowX={{ sm: "scroll", lg: "hidden" }}
+        // overflowX={{ sm: "scroll", lg: "hidden" }}
       >
         {!closeSearch && (
           <Flex
@@ -238,158 +238,178 @@ function CustomTable({
           </Flex>
         )}
         {headerGroups && page ? (
-          <Table
-            {...getTableProps()}
-            pt="0px"
-            mt={closeSearch ? "36px" : "0px"}
-          >
-            <Thead bg="#4C7BF4" color="#fff">
-              {headerGroups.map((headerGroup, index) => (
-                <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
-                  {headerGroup.headers.map((column, indexkey) => (
-                    <Th
-                      borderRadius={
-                        indexkey == 0
-                          ? "15px 0 0 0"
-                          : indexkey == headerGroup.headers.length - 1
-                          ? "0 15px 0 0 "
-                          : "none"
-                      }
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
-                      key={indexkey}
-                      borderColor={borderColor}
-                      fontFamily={"Prompt"}
-                      textAlign="center"
-                    >
-                      <Text
-                        justify="space-between"
-                        align="center"
-                        fontSize={{ sm: "10px", lg: "12px", xl: "14px" }}
-                        color="white"
+          <Box w="100%" overflowY="auto">
+            <Table
+              w="100%"
+              {...getTableProps()}
+              mt={closeSearch ? "36px" : "0px"}
+            >
+              <Thead bg="#4C7BF4" color="#fff" w="100 %">
+                {headerGroups.map((headerGroup, index) => (
+                  <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
+                    {headerGroup.headers.map((column, indexkey) => (
+                      <Th
+                        borderRadius={
+                          indexkey == 0
+                            ? "15px 0 0 0"
+                            : indexkey == headerGroup.headers.length - 1
+                            ? "0 15px 0 0 "
+                            : "none"
+                        }
+                        {...column.getHeaderProps(
+                          column.getSortByToggleProps()
+                        )}
+                        key={indexkey}
+                        borderColor={borderColor}
+                        fontFamily={"Prompt"}
+                        textAlign="center"
                       >
-                        {column.render("Header")}
-                      </Text>
-                    </Th>
-                  ))}
-                </Tr>
-              ))}
-            </Thead>
-            <Tbody {...getTableBodyProps()} bg="white">
-              {page.map((row, index) => {
-                prepareRow(row);
-                return (
-                  <Tr
-                    {...row.getRowProps()}
-                    key={index}
-                    cursor={"pointer"}
-                    onClick={() => {
-                      setReport(row.original);
-                      navigate(`/${row.original.ref}`);
-                    }}
-                  >
-                    {row.cells.map((cell, i) => {
-                      let data = "";
-                      if (cell.column?.extra) {
-                        data = cell.column?.extra(
-                          cell.value,
-                          // tableData[row.getRowProps().key.split('_')[1]],
-                          tableData[row.getRowProps().key.split("_")[1]],
-                          cell
-                        );
-                      } else {
-                        data = (
-                          <Text
-                            color={textColor}
-                            fontSize="sm"
-                            fontWeight="500"
-                            key={i}
-                          >
-                            {cell.value}
-                          </Text>
-                        );
-                      }
-                      // console.log(cell.column.header)
-                      if (cell.column.Header === "วันที่แจ้ง") {
-                        return (
-                          <Td
-                            {...cell.getCellProps()}
-                            key={i}
-                            fontSize={{ sm: "12px" }}
-                            minW={{
-                              sm: "220px",
-                              md: "220px",
-                              lg: "auto",
-                              xl: "auto",
-                            }}
-                            borderColor={borderColor}
-                            textAlign="center"
-                          >
-                            <Center>
-                              {moment(data.props.children).format(
-                                "DD/MM/YYYY HH:mm:ss"
-                              )}
-                            </Center>
-                          </Td>
-                        );
-                      }
-                      if (cell.column.Header === "สถานะ") {
-                        return (
-                          <Td
-                            {...cell.getCellProps()}
-                            key={i}
-                            fontSize={{ sm: "12px" }}
-                            minW={{
-                              sm: "220px",
-                              md: "220px",
-                              lg: "auto",
-                              xl: "auto",
-                            }}
-                            borderColor={borderColor}
-                            textAlign="center"
-                          >
-                            <Center>{reportStatus(data.props.children)}</Center>
-                          </Td>
-                        );
-                      } else {
-                        return (
-                          <Td
-                            {...cell.getCellProps()}
-                            key={i}
-                            fontSize={{ sm: "12px" }}
-                            minW={{
-                              sm: "220px",
-                              md: "220px",
-                              lg: "auto",
-                              xl: "auto",
-                            }}
-                            borderColor={borderColor}
-                            textAlign="center"
-                          >
-                            <Center>{data}</Center>
-                          </Td>
-                        );
-                      }
-                    })}
+                        <Text
+                          justify="space-between"
+                          align="center"
+                          fontSize={{ sm: "10px", lg: "12px", xl: "14px" }}
+                          color="white"
+                        >
+                          {column.render("Header")}
+                        </Text>
+                      </Th>
+                    ))}
                   </Tr>
-                );
-              })}
-            </Tbody>
-          </Table>
+                ))}
+              </Thead>
+              {!isFetching ? (
+                <Tbody {...getTableBodyProps()} bg="white">
+                  {page.map((row, index) => {
+                    prepareRow(row);
+                    return (
+                      <Tr
+                        {...row.getRowProps()}
+                        key={index}
+                        cursor={"pointer"}
+                        onClick={() => {
+                          setReport(row.original);
+                          navigate(`/${row.original.ref}`);
+                        }}
+                      >
+                        {row.cells.map((cell, i) => {
+                          let data = "";
+                          if (cell.column?.extra) {
+                            data = cell.column?.extra(
+                              cell.value,
+                              // tableData[row.getRowProps().key.split('_')[1]],
+                              tableData[row.getRowProps().key.split("_")[1]],
+                              cell
+                            );
+                          } else {
+                            data = (
+                              <Text
+                                color={textColor}
+                                fontSize="sm"
+                                fontWeight="500"
+                                key={i}
+                              >
+                                {cell.value}
+                              </Text>
+                            );
+                          }
+                          // console.log(cell.column.header)
+                          if (cell.column.Header === "วันที่แจ้ง") {
+                            return (
+                              <Td
+                                {...cell.getCellProps()}
+                                key={i}
+                                fontSize={{ sm: "12px" }}
+                                minW={{
+                                  sm: "220px",
+                                  md: "220px",
+                                  lg: "auto",
+                                  xl: "auto",
+                                }}
+                                borderColor={borderColor}
+                                textAlign="center"
+                              >
+                                <Center>
+                                  {moment(data.props.children).format(
+                                    "DD/MM/YYYY HH:mm:ss"
+                                  )}
+                                </Center>
+                              </Td>
+                            );
+                          }
+                          if (cell.column.Header === "สถานะ") {
+                            return (
+                              <Td
+                                {...cell.getCellProps()}
+                                key={i}
+                                fontSize={{ sm: "12px" }}
+                                minW={{
+                                  sm: "220px",
+                                  md: "220px",
+                                  lg: "auto",
+                                  xl: "auto",
+                                }}
+                                borderColor={borderColor}
+                                textAlign="center"
+                              >
+                                <Center>
+                                  {reportStatus(data.props.children)}
+                                </Center>
+                              </Td>
+                            );
+                          } else {
+                            return (
+                              <Td
+                                {...cell.getCellProps()}
+                                key={i}
+                                fontSize={{ sm: "12px" }}
+                                minW={{
+                                  sm: "220px",
+                                  md: "220px",
+                                  lg: "auto",
+                                  xl: "auto",
+                                }}
+                                borderColor={borderColor}
+                                textAlign="center"
+                              >
+                                <Center>{data}</Center>
+                              </Td>
+                            );
+                          }
+                        })}
+                      </Tr>
+                    );
+                  })}
+                </Tbody>
+              ) : (
+                <Tbody>
+                  <Tr>
+                    <Td colSpan={5}>
+                      <Box w="fit-content" m="auto">
+                        <Spinner size="md" />
+                      </Box>
+                    </Td>
+                  </Tr>
+                </Tbody>
+              )}
+            </Table>
+          </Box>
         ) : (
           <Box>
             <Spinner size={"md"} />
           </Box>
         )}
         <Flex
-          mt="24px"
+          mt="27px"
           direction={{ sm: "column", md: "row" }}
           justify="space-between"
           align="center"
           w="100%"
           px={{ md: "22px" }}
+          flexDir={["column", "row"]}
         >
           <Flex align="center">
             <Text
+              w="100%"
               me="10px"
               minW="max-content"
               fontSize="sm"
@@ -429,6 +449,7 @@ function CustomTable({
           </Text>
 
           <Stack
+            w="100%"
             direction="row"
             alignSelf={{ base: "unset", md: "flex-end" }}
             spacing="4px"
@@ -458,7 +479,7 @@ function CustomTable({
               <NumberInput
                 max={pageCount - 1}
                 min={1}
-                w="75px"
+                w="100%"
                 mx="6px"
                 defaultValue="1"
                 // onChange={(e) => gotoPage(e)}
@@ -534,7 +555,7 @@ function CustomTable({
                           // })
                           getSetParams(pageNumber);
                         }}
-                        w="40px"
+                        w={{ base: "20px", md: "40px" }}
                         h="40px"
                         borderRadius="50%"
                         // bg={
@@ -593,7 +614,7 @@ function CustomTable({
           </Stack>
         </Flex>
       </Flex>
-      {user && (
+      {/* {user && (
         <Menu>
           <MenuButton
             as={Button}
@@ -618,8 +639,8 @@ function CustomTable({
             </Center>
           </MenuButton>
         </Menu>
-      )}
-    </>
+      )} */}
+    </div>
   );
 }
 

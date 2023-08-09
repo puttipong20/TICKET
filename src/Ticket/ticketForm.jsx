@@ -139,21 +139,21 @@ function TicketForm() {
     setAllImgUpload(allImgUpload.filter((i) => i !== allImgUpload[index]));
   };
   return (
-    <Flex direction="column" minH="100vh" align="center" w="100vw">
+    <Flex direction="column" minH="100vh" align="center" w="100%" pb="3">
       <Heading
         fontFamily={"inherit"}
         textAlign={"center"}
         w="100%"
-        h="10dvh"
+        h="15vh"
         color="#fff"
         bg={"#4C7BF4"}
         display="flex"
         alignItems={"center"}
         justifyContent={"center"}
       >
-        แจ้งปัญหา
+        แจ้งปัญหาการใช้งาน
       </Heading>
-      <Box w="50%">
+      <Box w={{base:"90%",md:"50%"}}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Container
             pb="10px"
@@ -353,13 +353,13 @@ function TicketForm() {
                           bg="#FAFCFE"
                           _hover={{ opacity: "0.9" }}
                         >
-                          <Flex color="#4C7BF4" fontSize={"3rem"}>
+                          <Flex color="#4C7BF4" fontSize={{base:"2.5rem",md:"3rem"}}>
                             <MdUpload />
                           </Flex>
-                          <Text color="#4C7BF4" fontWeight="bold">
+                          <Text color="#4C7BF4" fontWeight="bold" fontSize={{base:"12px",md:"16px"}}>
                             คลิกเพื่ออัพโหลดไฟล์
                           </Text>
-                          <Text color="#8F9BBA" fontSize={"0.7rem"}>
+                          <Text color="#8F9BBA" fontSize={{base:"0.5rem",md:"0.7rem"}}>
                             PNG,JPG are allowed
                           </Text>
                         </VStack>
