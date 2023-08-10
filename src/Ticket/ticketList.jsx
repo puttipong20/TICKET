@@ -14,29 +14,16 @@ import {
   Select,
   Spinner,
   Icon,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  useDisclosure,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogBody,
-  AlertDialogFooter,
-  AlertDialogHeader,
 } from "@chakra-ui/react";
 import CustomTable from "./Components/customTableTicket";
 import axios from "axios";
 import { search } from "ss-search";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { AiOutlineReload } from "react-icons/ai";
 import { useTicketContext } from "./TicketContext/TicketContext";
 import { useAppContext } from "../Context/AppContext";
 import { useNavigate } from "react-router-dom";
-import { BsFillArchiveFill } from "react-icons/bs";
-// import AlertArchive from "./Components/alertArchive";
 
 function TicketList() {
   const [refresh, setRefresh] = useState(false);
@@ -46,20 +33,6 @@ function TicketList() {
   const { control, watch } = useForm();
   const { firebaseId } = useTicketContext();
   const navigate = useNavigate();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const cancelRef = useRef()
-
-  const Archive = (docId) => {
-    console.log(docId)
-    // axios.post(
-    //   "https://us-central1-crafting-ticket-dev.cloudfunctions.net/updateReport",
-    //   {
-    //     reportId: docId,
-    //     isArchive: "true",
-    //   }
-    // );
-  };
-
   const columnsHeader = [
     {
       Header: "No.",
@@ -78,59 +51,6 @@ function TicketList() {
       Header: "สถานะ",
       accessor: "RepStatus",
     },
-    {
-      Header: "จัดการ",
-      extra: (data, row) => (
-        <Center>
-          <Menu>
-            <MenuButton as={Button}>...</MenuButton>
-            <MenuList minW={"5rem"}>
-              <MenuItem
-                onClick={() => Archive(row.docId)}
-                onOpen={onOpen}
-                onClose={onClose}
-                isOpen={isOpen}
-              >
-                <Flex
-                  w={"100%"}
-                  alignItems={"center"}
-                  justifyContent={"space-between"}
-                >
-                  <BsFillArchiveFill />
-                  จัดเก็บ
-                </Flex>
-                <AlertDialog
-                  isOpen={isOpen}
-                  leastDestructiveRef={cancelRef}
-                  onClose={onClose}
-                >
-                  <AlertDialogOverlay>
-                    <AlertDialogContent>
-                      <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                        Delete Customer
-                      </AlertDialogHeader>
-
-                      <AlertDialogBody>
-                        Are you sure? You can't undo this action afterwards.
-                      </AlertDialogBody>
-
-                      <AlertDialogFooter>
-                        <Button ref={cancelRef} onClick={onClose}>
-                          Cancel
-                        </Button>
-                        <Button colorScheme="red" onClick={onClose} ml={3}>
-                          Delete
-                        </Button>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialogOverlay>
-                </AlertDialog>
-              </MenuItem>
-            </MenuList>
-          </Menu>
-        </Center>
-      ),
-    },
   ];
   const fetchProject = async () => {
     setIsFetching(true);
@@ -141,15 +61,11 @@ function TicketList() {
           { firebaseID: firebaseId }
         )
         .then((res) => {
-          const allReport = res.data;
-          const sortData = allReport.sort((a, b) => {
-            const dateA = new Date(a.createAt);
-            const dateB = new Date(b.createAt);
-            return dateB - dateA;
-          });
-          setProjects(sortData);
-          setFilterProject(sortData);
-
+          // console.clear()
+          // // console.log(firebaseId)
+          // console.log(res.data)
+          setProjects(res.data);
+          setFilterProject(res.data);
         });
     }
     setIsFetching(false);
@@ -297,19 +213,14 @@ function TicketList() {
             color="#fff"
             _hover={{ opacity: "0.8" }}
             isLoading={isFetching}
-            borderRadius={"16px"}
           >
             <AiOutlineReload />
           </Button>
         </Center>
         <Flex justify="flex-end">
-          <Button color="#fff" bg="#4C7BF4" borderRadius={"16px"} mx={2}>
-            <BsFillArchiveFill />
-          </Button>
           {user && (
             <Button
-              borderRadius={"16px"}
-              mt={{ base: "2", md: "0" }}
+              mt={{base:"2",md:"0"}}
               onClick={() => navigate("/form")}
               bg="#4C7BF4"
               color="#fff"
@@ -343,14 +254,14 @@ function TicketList() {
           )}
         </Flex>
       </HStack>
-      <Box>
-        <CustomTable
-          columnsData={columnsHeader}
-          tableData={filterProject}
-          disabledSearch={true}
-          isFetching={isFetching}
-        />
-      </Box>
+        <Box>
+          <CustomTable
+            columnsData={columnsHeader}
+            tableData={filterProject}
+            disabledSearch={true}
+            isFetching={isFetching}
+          />
+        </Box>
     </Box>
   );
 }
