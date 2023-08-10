@@ -46,7 +46,6 @@ export default function TicketEdit({ data }) {
 
   useEffect(() => {
     setOldData(data)
-    // console.log(props.data)
   }, [data])
 
   useEffect(() => {

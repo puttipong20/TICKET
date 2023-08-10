@@ -12,8 +12,11 @@ import {
   InputGroup,
   InputLeftElement,
   Select,
-  Spinner,
-  Icon,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Tag,
 } from "@chakra-ui/react";
 import CustomTable from "./Components/customTableTicket";
 import axios from "axios";
@@ -24,12 +27,15 @@ import { AiOutlineReload } from "react-icons/ai";
 import { useTicketContext } from "./TicketContext/TicketContext";
 import { useAppContext } from "../Context/AppContext";
 import { useNavigate } from "react-router-dom";
+import { BsFillArchiveFill } from "react-icons/bs";
+import AlertArchive from "./Components/alertArchive";
 
 function TicketList() {
   const [refresh, setRefresh] = useState(false);
   const [projects, setProjects] = useState([]);
   const [filterProject, setFilterProject] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
+  const [isArchive, setIsArchive] = useState(false);
   const { control, watch } = useForm();
   const { firebaseId } = useTicketContext();
   const navigate = useNavigate();
@@ -51,7 +57,40 @@ function TicketList() {
       Header: "สถานะ",
       accessor: "RepStatus",
     },
+    {
+      Header: "จัดการ",
+      // accessor: 'RepStatus',
+      extra: (data, row) => (
+        <Center>
+          <Menu>
+            <MenuButton as={Button} borderRadius={"16px"}>
+              ...
+            </MenuButton>
+            <MenuList minW={"5rem"}>
+              <MenuItem>
+                <AlertArchive isArchive={isArchive} fetchProject={fetchProject} docId={row.docId} />
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </Center>
+      ),
+    },
   ];
+  const filterReport = (sortData) => {
+    const archiveData = sortData.filter((data) => {
+      return data.isArchive == true;
+    });
+    const notArchiveData = sortData.filter((data) => {
+      return data.isArchive == false || data.isArchive == undefined;
+    });
+
+    if (isArchive === false) {
+      setFilterProject(notArchiveData);
+    } else {
+      setFilterProject(archiveData);
+    }
+  };
+
   const fetchProject = async () => {
     setIsFetching(true);
     if (firebaseId !== undefined) {
@@ -61,20 +100,21 @@ function TicketList() {
           { firebaseID: firebaseId }
         )
         .then((res) => {
-          // console.clear()
-          // // console.log(firebaseId)
-          // console.log(res.data)
-          setProjects(res.data);
-          setFilterProject(res.data);
+          const allReport = res.data;
+          const sortData = allReport.sort((a, b) => {
+            const dateA = new Date(a.createAt);
+            const dateB = new Date(b.createAt);
+            return dateB - dateA;
+          });
+          setProjects(sortData);
+          filterReport(sortData);
         });
     }
     setIsFetching(false);
   };
-
   useEffect(() => {
     fetchProject();
-  }, [refresh, firebaseId]);
-
+  }, [refresh, firebaseId,isArchive]);
   const statusFilter = watch("statusFilter") || "";
   const searchRef = watch("searchRef") || "";
 
@@ -207,6 +247,7 @@ function TicketList() {
             )}
           />
           <Button
+            borderRadius={"16px"}
             ml="2"
             onClick={() => setRefresh(!refresh)}
             bg="#4C7BF4"
@@ -218,9 +259,19 @@ function TicketList() {
           </Button>
         </Center>
         <Flex justify="flex-end">
+          <Button
+            mx={2}
+            onClick={() => setIsArchive(!isArchive)}
+            bg="#4C7BF4"
+            color="#fff"
+            borderRadius={"16px"}
+          >
+            <BsFillArchiveFill />
+          </Button>
           {user && (
             <Button
-              mt={{base:"2",md:"0"}}
+              borderRadius={"16px"}
+              mt={{ base: "2", md: "0" }}
               onClick={() => navigate("/form")}
               bg="#4C7BF4"
               color="#fff"
@@ -229,39 +280,31 @@ function TicketList() {
             >
               แจ้งปัญหาการใช้งาน
             </Button>
-            // <Button
-            //   as={Button}
-            //   bg="#4C7BF4"
-            //   colorScheme="btn"
-            //   borderRadius="full"
-            //   position="fixed"
-            //   right={5}
-            //   bottom={5}
-            //   w={"50px"}
-            //   h={"50px"}
-            //   px="0"
-            //   _hover={{ bg: "#4C7BF4", opacity: "0.75" }}
-            //   onClick={() => navigate("/form")}
-            // >
-            //   <Center
-            //     display={"flex"}
-            //     justifyContent={"center"}
-            //     alignItems={"center"}
-            //   >
-            //     <Icon as={BsPlus} fontSize={"45px"} />
-            //   </Center>
-            // </Button>
           )}
         </Flex>
       </HStack>
-        <Box>
-          <CustomTable
-            columnsData={columnsHeader}
-            tableData={filterProject}
-            disabledSearch={true}
-            isFetching={isFetching}
-          />
-        </Box>
+      {isArchive && (
+        <Tag
+          size={"md"}
+          borderRadius="full"
+          variant="solid"
+          my={3}
+          bg="#4C7BF4"
+          color="#fff"
+        >
+          รายการจัดเก็บ
+        </Tag>
+      )}
+      <Box>
+        <CustomTable
+          columnsData={columnsHeader}
+          tableData={filterProject}
+          disabledSearch={true}
+          isFetching={isFetching}
+          setRefresh={setRefresh}
+          isArchive={isArchive}
+        />
+      </Box>
     </Box>
   );
 }

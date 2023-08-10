@@ -33,7 +33,6 @@ import {
 import { Fragment, useEffect, useMemo } from "react";
 import { MdChevronRight, MdChevronLeft } from "react-icons/md";
 import { useSearchParams } from "react-router-dom";
-import { BsPlus } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import {
   useGlobalFilter,
@@ -43,7 +42,6 @@ import {
 } from "react-table";
 import { useTicketContext } from "../TicketContext/TicketContext";
 import moment from "moment";
-import { useAppContext } from "../../Context/AppContext";
 
 function SearchBar() {
   // Pass the computed styles into the `__css` prop
@@ -127,7 +125,6 @@ function CustomTable({
     useSortBy,
     usePagination
   );
-
   const getSetParams = (tbPage) => {
     const params = {};
     searchParams.forEach((value, key) => {
@@ -285,10 +282,9 @@ function CustomTable({
                       <Tr
                         {...row.getRowProps()}
                         key={index}
-                        cursor={"pointer"}
                         onClick={() => {
                           setReport(row.original);
-                          navigate(`/${row.original.ref}`);
+                          // navigate(`/${row.original.ref}`);
                         }}
                       >
                         {row.cells.map((cell, i) => {
@@ -296,7 +292,6 @@ function CustomTable({
                           if (cell.column?.extra) {
                             data = cell.column?.extra(
                               cell.value,
-                              // tableData[row.getRowProps().key.split('_')[1]],
                               tableData[row.getRowProps().key.split("_")[1]],
                               cell
                             );
@@ -312,7 +307,35 @@ function CustomTable({
                               </Text>
                             );
                           }
-                          // console.log(cell.column.header)
+                          if (cell.column.Header === "No.") {
+                            return (
+                              <Td
+                                {...cell.getCellProps()}
+                                key={i}
+                                fontSize={{ sm: "12px" }}
+                                minW={{
+                                  sm: "220px",
+                                  md: "220px",
+                                  lg: "auto",
+                                  xl: "auto",
+                                }}
+                                borderColor={borderColor}
+                                textAlign="center"
+                              >
+                                <Center>
+                                  <Box
+                                    cursor={"pointer"}
+                                    onClick={() => {
+                                      navigate(`/${cell.value}`);
+                                    }}
+                                    textDecoration={"underline"}
+                                  >
+                                    {data}
+                                  </Box>
+                                </Center>
+                              </Td>
+                            );
+                          }
                           if (cell.column.Header === "วันที่แจ้ง") {
                             return (
                               <Td
