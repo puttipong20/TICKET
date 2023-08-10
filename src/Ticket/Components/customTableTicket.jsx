@@ -32,7 +32,7 @@ import {
 } from "@chakra-ui/react";
 import { Fragment, useEffect, useMemo } from "react";
 import { MdChevronRight, MdChevronLeft } from "react-icons/md";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { BsPlus } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import {
@@ -282,15 +282,7 @@ function CustomTable({
                   {page.map((row, index) => {
                     prepareRow(row);
                     return (
-                      <Tr
-                        {...row.getRowProps()}
-                        key={index}
-                        cursor={"pointer"}
-                        onClick={() => {
-                          setReport(row.original);
-                          navigate(`/${row.original.ref}`);
-                        }}
-                      >
+                      <Tr {...row.getRowProps()} key={index}>
                         {row.cells.map((cell, i) => {
                           let data = "";
                           if (cell.column?.extra) {
@@ -313,6 +305,38 @@ function CustomTable({
                             );
                           }
                           // console.log(cell.column.header)
+                          if (cell.column.Header === "No.") {
+                            return (
+                              <Td
+                                {...cell.getCellProps()}
+                                key={i}
+                                fontSize={{ sm: "12px" }}
+                                minW={{
+                                  sm: "220px",
+                                  md: "220px",
+                                  lg: "auto",
+                                  xl: "auto",
+                                }}
+                                borderColor={borderColor}
+                                textAlign="center"
+                              >
+                                <Center>
+                                  <Box
+                                    cursor={"pointer"}
+                                    textDecoration={"underline"}
+                                  >
+                                    <Link
+                                      to={`/${data}`}
+                                      onClick={() => console.log(cell)}
+                                    >
+                                      {data}
+                                    </Link>
+                                  </Box>
+                                </Center>
+                              </Td>
+                            );
+                          }
+
                           if (cell.column.Header === "วันที่แจ้ง") {
                             return (
                               <Td
