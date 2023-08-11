@@ -3,7 +3,7 @@
 import TicketDetail from "./Ticket/ticketDetail";
 import TicketForm from "./Ticket/ticketForm";
 import TicketList from "./Ticket/ticketList";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { Box, Center, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useTicketContext } from "./Ticket/TicketContext/TicketContext";
@@ -13,7 +13,6 @@ function App() {
   const { firebaseId, setFirebaseId } = useTicketContext();
   const { setUser } = useAppContext();
   const [noData, setNoData] = useState([]);
-  const navigate = useNavigate()
 
   const getPath = () => {
     const homePath = localStorage.getItem("homePath");
