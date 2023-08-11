@@ -3,7 +3,7 @@
 import TicketDetail from "./Ticket/ticketDetail";
 import TicketForm from "./Ticket/ticketForm";
 import TicketList from "./Ticket/ticketList";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { Box, Center, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useTicketContext } from "./Ticket/TicketContext/TicketContext";
@@ -13,6 +13,7 @@ function App() {
   const { firebaseId, setFirebaseId } = useTicketContext();
   const { setUser } = useAppContext();
   const [noData, setNoData] = useState([]);
+  const navigate = useNavigate()
 
   const getPath = () => {
     const homePath = localStorage.getItem("homePath");
@@ -25,15 +26,10 @@ function App() {
     const email = urlParams.get("email");
     const projectId = urlParams.get("projectId");
     const temp = [];
-    if (!username && !email) {
-      temp.push("ไม่มีข้อมูล username");
-      temp.push("ไม่มีข้อมูล email");
-    } else if (username && email) {
+    if (!username && !email || !projectId) {
+      window.location.replace('https://craftinglab.co/')
+    } else if ((username || email) && projectId  ) {
       setUser({ username: username, email: email });
-    }
-    if (!projectId) {
-      temp.push("ไม่มีข้อมูล projectId");
-    } else {
       setFirebaseId(projectId);
     }
 
