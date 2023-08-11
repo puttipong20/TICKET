@@ -25,15 +25,10 @@ function App() {
     const email = urlParams.get("email");
     const projectId = urlParams.get("projectId");
     const temp = [];
-    if (!username && !email) {
-      temp.push("ไม่มีข้อมูล username");
-      temp.push("ไม่มีข้อมูล email");
-    } else if (username && email) {
+    if (!username && !email || !projectId) {
+      window.location.replace('https://craftinglab.co/')
+    } else if ((username || email) && projectId  ) {
       setUser({ username: username, email: email });
-    }
-    if (!projectId) {
-      temp.push("ไม่มีข้อมูล projectId");
-    } else {
       setFirebaseId(projectId);
     }
 
