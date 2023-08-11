@@ -114,7 +114,7 @@ function TicketList() {
   };
   useEffect(() => {
     fetchProject();
-  }, [refresh, firebaseId,isArchive]);
+  }, [refresh,firebaseId,isArchive]);
   const statusFilter = watch("statusFilter") || "";
   const searchRef = watch("searchRef") || "";
 
@@ -137,16 +137,14 @@ function TicketList() {
       </Heading>
       <HStack
         my="1em"
-        alignItems={"center"}
+        alignItems={'center'}
         spacing={{ base: "0px", sm: "0px", md: "10px" }}
         p={{ sm: "0px", md: "20px 20px 30px 20px" }}
         background={{ sm: "none", md: "#FFFFFF" }}
-        // border='1px solid black'
         boxShadow={{
           sm: "0px",
           md: "14px 17px 40px 4px rgba(112, 144, 176, 0.08)",
         }}
-        borderRadius={{ sm: "10px", md: "30px" }}
         justifyContent="space-between"
         flexDirection={{
           base: "column",
@@ -154,9 +152,9 @@ function TicketList() {
           md: "row",
           lg: "row",
         }}
-        w="100%"
+        maxW="100%"
       >
-        <Center>
+        <Flex alignItems={'center'} mt={2}>
           <Controller
             name="searchRef"
             control={control}
@@ -206,16 +204,8 @@ function TicketList() {
               <Box w={{ base: "100%", md: "fit-content" }} ml="2">
                 <Select
                   {...field}
-                  pt={{ base: "0px", sm: "15px", md: "0rem" }}
                   w={{ base: "100%", md: "250px" }}
-                  // h='44px'
-                  // maxh='44px'
                   variant="search"
-                  // border={{
-                  //   base: '1px solid #E8E9E9',
-                  //   sm: '1px solid #E8E9E9',
-                  //   md: '0px',
-                  // }}
                   border="1px solid rgb(0,0,0,0.2)"
                   bg={{
                     base: "white",
@@ -230,12 +220,7 @@ function TicketList() {
                     fontSize: "14px",
                     opacity: 1,
                   }}
-                  borderRadius={{
-                    base: "10px",
-                    sm: "10px",
-                    md: "30px",
-                    lg: "30px",
-                  }}
+                  borderRadius={"20px"}
                 >
                   <option value="">สถานะทั้งหมด</option>
                   <option value="รอรับเรื่อง">รอรับเรื่อง</option>
@@ -257,21 +242,21 @@ function TicketList() {
           >
             <AiOutlineReload />
           </Button>
-        </Center>
-        <Flex justify="flex-end">
+        </Flex>
+        <Flex justifyContent="flex-end" alignItems={'center'} mt={2} w={'100%'}>
           <Button
             mx={2}
             onClick={() => setIsArchive(!isArchive)}
             bg="#4C7BF4"
             color="#fff"
             borderRadius={"16px"}
+            _hover={{opacity: 1}}
           >
             <BsFillArchiveFill />
           </Button>
           {user && (
             <Button
               borderRadius={"16px"}
-              mt={{ base: "2", md: "0" }}
               onClick={() => navigate("/form")}
               bg="#4C7BF4"
               color="#fff"
@@ -301,7 +286,6 @@ function TicketList() {
           tableData={filterProject}
           disabledSearch={true}
           isFetching={isFetching}
-          setRefresh={setRefresh}
           isArchive={isArchive}
         />
       </Box>

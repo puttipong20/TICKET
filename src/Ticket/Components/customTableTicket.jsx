@@ -27,8 +27,6 @@ import {
   useColorModeValue,
   Select,
   Spinner,
-  Menu,
-  MenuButton,
 } from "@chakra-ui/react";
 import { Fragment, useEffect, useMemo } from "react";
 import { MdChevronRight, MdChevronLeft } from "react-icons/md";
@@ -89,6 +87,7 @@ function CustomTable({
   disabledSearch,
   closeSearch,
   isFetching,
+  isArchive,
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const columns = useMemo(() => columnsData, [columnsData]);
@@ -274,7 +273,7 @@ function CustomTable({
                   </Tr>
                 ))}
               </Thead>
-              {!isFetching ? (
+              {!isFetching && page.length > 0 ? (
                 <Tbody {...getTableBodyProps()} bg="white">
                   {page.map((row, index) => {
                     prepareRow(row);
@@ -403,10 +402,22 @@ function CustomTable({
                     );
                   })}
                 </Tbody>
+              ) : !isFetching && page.length < 1 ? (
+                <Tbody>
+                  <Tr>
+                    <Td colSpan={6}>
+                      <Box w="fit-content" m="auto">
+                        {isArchive === false
+                          ? "ไม่มีรายการปัญหา"
+                          : "ไมีมีรายการจัดเก็บ"}
+                      </Box>
+                    </Td>
+                  </Tr>
+                </Tbody>
               ) : (
                 <Tbody>
                   <Tr>
-                    <Td colSpan={5}>
+                    <Td colSpan={6}>
                       <Box w="fit-content" m="auto">
                         <Spinner size="md" />
                       </Box>
@@ -430,7 +441,7 @@ function CustomTable({
           px={{ md: "22px" }}
           flexDir={["column", "row"]}
         >
-          <Flex align="center">
+          <Flex align="center" my={2}>
             <Text
               w="100%"
               me="10px"
@@ -456,213 +467,199 @@ function CustomTable({
               })}
             </Select>
           </Flex>
+          <Flex my={2}
 
-          <Text
-            fontSize="sm"
-            color="gray.500"
-            fontWeight="normal"
-            mb={{ sm: "24px", md: "0px" }}
-            ml={{ sm: "5px", md: "5px" }}
+            minW={"30%"}
+            alignItems={"center"}
+            justifyContent={"space-between"}
           >
-            Showing {pageSize * pageIndex + 1} to{" "}
-            {pageSize * (pageIndex + 1) <= tableData.length
-              ? pageSize * (pageIndex + 1)
-              : tableData.length}{" "}
-            of {tableData.length} entries
-          </Text>
-
-          <Stack
-            w="100%"
-            direction="row"
-            alignSelf={{ base: "unset", md: "flex-end" }}
-            spacing="4px"
-            ms={{ base: "0px", md: "auto" }}
-          >
-            <Button
-              variant="no-effects"
-              onClick={() => previousPage()}
-              transition="all .5s ease"
-              w="40px"
-              h="40px"
-              borderRadius="50%"
-              bg="transparent"
-              border="1px solid"
-              borderColor={useColorModeValue("gray.200", "white")}
-              display={
-                pageSize === 0 ? "none" : canPreviousPage ? "flex" : "none"
-              }
-              _hover={{
-                bg: "whiteAlpha.100",
-                opacity: "0.7",
-              }}
-            >
-              <Icon as={MdChevronLeft} w="16px" h="16px" color={textColor} />
-            </Button>
-            {pageSize === 0 ? (
-              <NumberInput
-                max={pageCount - 1}
-                min={1}
-                w="100%"
-                mx="6px"
-                defaultValue="1"
-                // onChange={(e) => gotoPage(e)}
-                // onChange={(e) => setSearchParams({ tbPage: Number(e) })}
-                onChange={(e) => getSetParams(e)}
+            <Box>
+              <Text
+                minW={"25%"}
+                fontSize="sm"
+                color="gray.500"
+                fontWeight="normal"
+                mb={{ sm: "24px", md: "0px" }}
+                ml={{ sm: "5px", md: "5px" }}
               >
-                <NumberInputField />
-                <NumberInputStepper>
-                  <NumberIncrementStepper onClick={() => nextPage()} />
-                  <NumberDecrementStepper onClick={() => previousPage()} />
-                </NumberInputStepper>
-              </NumberInput>
-            ) : (
-              createPages(pageIndex + 1, pageCount).map(
-                (pageNumber, index, array) => {
-                  return (
-                    <Fragment key={index}>
-                      {array[index - 1] + 2 < pageNumber && (
-                        <Button
-                          variant="no-effects"
-                          transition="all .5s ease"
-                          onClick={() => {
-                            // gotoPage(pageNumber - 1)
-                            // setSearchParams({
-                            //   tbPage: Number(pageNumber),
-                            // })
-                            getSetParams(pageNumber);
-                          }}
-                          w="40px"
-                          h="40px"
-                          borderRadius="50%"
-                          bg={
-                            pageNumber === pageIndex + 1
-                              ? brandColor
-                              : "transparent"
-                          }
-                          border={
-                            pageNumber === pageIndex + 1
-                              ? "none"
-                              : "1px solid lightgray"
-                          }
-                          _hover={
-                            pageNumber === pageIndex + 1
-                              ? {
-                                  opacity: "0.7",
+                Showing {pageSize * pageIndex + 1} to{" "}
+                {pageSize * (pageIndex + 1) <= tableData.length
+                  ? pageSize * (pageIndex + 1)
+                  : tableData.length}{" "}
+                of {tableData.length} entries
+              </Text>
+            </Box>
+            <Box>
+              <Stack
+                w="100%"
+                direction="row"
+                alignSelf={{ base: "unset", md: "flex-end" }}
+                spacing="4px"
+                ms={{ base: "0px", md: "auto" }}
+              >
+                <Button
+                  variant="no-effects"
+                  onClick={() => previousPage()}
+                  transition="all .5s ease"
+                  w="40px"
+                  h="40px"
+                  borderRadius="50%"
+                  bg="transparent"
+                  border="1px solid"
+                  borderColor={useColorModeValue("gray.200", "white")}
+                  display={
+                    pageSize === 0 ? "none" : canPreviousPage ? "flex" : "none"
+                  }
+                  _hover={{
+                    bg: "whiteAlpha.100",
+                    opacity: "0.7",
+                  }}
+                >
+                  <Icon
+                    as={MdChevronLeft}
+                    w="16px"
+                    h="16px"
+                    color={textColor}
+                  />
+                </Button>
+                {pageSize === 0 ? (
+                  <NumberInput
+                    max={pageCount - 1}
+                    min={1}
+                    w="100%"
+                    mx="6px"
+                    defaultValue="1"
+                    // onChange={(e) => gotoPage(e)}
+                    // onChange={(e) => setSearchParams({ tbPage: Number(e) })}
+                    onChange={(e) => getSetParams(e)}
+                  >
+                    <NumberInputField />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper onClick={() => nextPage()} />
+                      <NumberDecrementStepper onClick={() => previousPage()} />
+                    </NumberInputStepper>
+                  </NumberInput>
+                ) : (
+                  createPages(pageIndex + 1, pageCount).map(
+                    (pageNumber, index, array) => {
+                      return (
+                        <Fragment key={index}>
+                          {array[index - 1] + 2 < pageNumber && (
+                            <Button
+                              variant="no-effects"
+                              transition="all .5s ease"
+                              onClick={() => {
+                                getSetParams(pageNumber);
+                              }}
+                              w="40px"
+                              h="40px"
+                              borderRadius="50%"
+                              bg={
+                                pageNumber === pageIndex + 1
+                                  ? brandColor
+                                  : "transparent"
+                              }
+                              border={
+                                pageNumber === pageIndex + 1
+                                  ? "none"
+                                  : "1px solid lightgray"
+                              }
+                              _hover={
+                                pageNumber === pageIndex + 1
+                                  ? {
+                                      opacity: "0.7",
+                                    }
+                                  : {
+                                      bg: "whiteAlpha.100",
+                                    }
+                              }
+                              key={pageNumber + "..."}
+                            >
+                              <Text
+                                key={index}
+                                fontSize="sm"
+                                color={
+                                  pageNumber === pageIndex + 1
+                                    ? "#fff"
+                                    : textColor
                                 }
-                              : {
-                                  bg: "whiteAlpha.100",
-                                }
-                          }
-                          key={pageNumber + "..."}
-                        >
-                          <Text
-                            key={index}
-                            fontSize="sm"
-                            color={
-                              pageNumber === pageIndex + 1 ? "#fff" : textColor
+                              >
+                                ...
+                              </Text>
+                            </Button>
+                          )}
+                          <Button
+                            variant="no-effects"
+                            bg="#4C7BF4"
+                            transition="all .5s ease"
+                            onClick={() => {
+                              getSetParams(pageNumber);
+                            }}
+                            w={{ base: "20px", md: "40px" }}
+                            h="40px"
+                            borderRadius="50%"
+                            border={
+                              pageNumber === pageIndex + 1
+                                ? "none"
+                                : "1px solid lightgray"
                             }
+                            _hover={
+                              pageNumber === pageIndex + 1
+                                ? {
+                                    opacity: "0.7",
+                                  }
+                                : {
+                                    bg: "whiteAlpha.100",
+                                  }
+                            }
+                            key={index}
                           >
-                            ...
-                          </Text>
-                        </Button>
-                      )}
-                      <Button
-                        variant="no-effects"
-                        bg="#4C7BF4"
-                        transition="all .5s ease"
-                        // onClick={() => gotoPage(pageNumber - 1)}
-                        onClick={() => {
-                          // gotoPage(pageNumber - 1)
-                          // setSearchParams({
-                          //   tbPage: Number(pageNumber),
-                          // })
-                          getSetParams(pageNumber);
-                        }}
-                        w={{ base: "20px", md: "40px" }}
-                        h="40px"
-                        borderRadius="50%"
-                        // bg={
-                        //   pageNumber === pageIndex + 1
-                        //     ? brandColor
-                        //     : 'transparent'
-                        // }
-                        border={
-                          pageNumber === pageIndex + 1
-                            ? "none"
-                            : "1px solid lightgray"
-                        }
-                        _hover={
-                          pageNumber === pageIndex + 1
-                            ? {
-                                opacity: "0.7",
+                            <Text
+                              fontSize="sm"
+                              color={
+                                pageNumber === pageIndex + 1
+                                  ? "#fff"
+                                  : textColor
                               }
-                            : {
-                                bg: "whiteAlpha.100",
-                              }
-                        }
-                        key={index}
-                      >
-                        <Text
-                          fontSize="sm"
-                          color={
-                            pageNumber === pageIndex + 1 ? "#fff" : textColor
-                          }
-                        >
-                          {pageNumber}
-                        </Text>
-                      </Button>
-                    </Fragment>
-                  );
-                }
-              )
-            )}
-            <Button
-              variant="no-effects"
-              onClick={() => nextPage()}
-              transition="all .5s ease"
-              w="40px"
-              h="40px"
-              borderRadius="50%"
-              bg="transparent"
-              border="1px solid"
-              borderColor={useColorModeValue("gray.200", "white")}
-              display={pageSize === 5 ? "none" : canNextPage ? "flex" : "none"}
-              _hover={{
-                bg: "whiteAlpha.100",
-                opacity: "0.7",
-              }}
-            >
-              <Icon as={MdChevronRight} w="16px" h="16px" color={textColor} />
-            </Button>
-          </Stack>
+                            >
+                              {pageNumber}
+                            </Text>
+                          </Button>
+                        </Fragment>
+                      );
+                    }
+                  )
+                )}
+                <Button
+                  variant="no-effects"
+                  onClick={() => nextPage()}
+                  transition="all .5s ease"
+                  w="40px"
+                  h="40px"
+                  borderRadius="50%"
+                  bg="transparent"
+                  border="1px solid"
+                  borderColor={useColorModeValue("gray.200", "white")}
+                  display={
+                    pageSize === 5 ? "none" : canNextPage ? "flex" : "none"
+                  }
+                  _hover={{
+                    bg: "whiteAlpha.100",
+                    opacity: "0.7",
+                  }}
+                >
+                  <Icon
+                    as={MdChevronRight}
+                    w="16px"
+                    h="16px"
+                    color={textColor}
+                  />
+                </Button>
+              </Stack>
+            </Box>
+          </Flex>
         </Flex>
       </Flex>
-      {/* {user && (
-        <Menu>
-          <MenuButton
-            as={Button}
-            bg="#4C7BF4"
-            colorScheme="btn"
-            borderRadius="full"
-            position="fixed"
-            right={5}
-            bottom={5}
-            w={"50px"}
-            h={"50px"}
-            px="0"
-            _hover={{ bg: "#4C7BF4", opacity: "0.75" }}
-            onClick={() => navigate("/form")}
-          >
-            <Center
-              display={"flex"}
-              justifyContent={"center"}
-              alignItems={"center"}
-            >
-              <Icon as={BsPlus} fontSize={"45px"} />
-            </Center>
-          </MenuButton>
-        </Menu>
-      )} */}
     </div>
   );
 }

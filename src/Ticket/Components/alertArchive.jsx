@@ -20,6 +20,7 @@ function AlertArchive({ isArchive,docId ,fetchProject}) {
   const toast = useToast();
 
   const Archive = (docId) => {
+    onClose();
     axios
       .post(
         "https://us-central1-crafting-ticket-dev.cloudfunctions.net/updateReport",
@@ -29,7 +30,6 @@ function AlertArchive({ isArchive,docId ,fetchProject}) {
         }
       )
       .then(() => {
-        onClose();
         toast({
           position: "top",
           title: isArchive === false? "จัดเก็บ": "ยกเลิกจัดเก็บ",
@@ -38,6 +38,7 @@ function AlertArchive({ isArchive,docId ,fetchProject}) {
           duration: 3000,
           isClosable: true,
         });
+        fetchProject()
       }).catch((e) => {
         toast({
           position: "top",
@@ -48,7 +49,6 @@ function AlertArchive({ isArchive,docId ,fetchProject}) {
           isClosable: true,
         });
       })
-      fetchProject()
   };
   return (
     <>
