@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site":"crafting-ticket-dev",
+    "site":"craftinglab-ticket-dev",
     "source": ".",
     "ignore": [
       "firebase.json",
