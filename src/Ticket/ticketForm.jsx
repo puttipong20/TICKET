@@ -153,7 +153,7 @@ function TicketForm() {
       >
         แจ้งปัญหาการใช้งาน
       </Heading>
-      <Box w={{base:"90%",md:"50%"}}>
+      <Box w={{ base: "90%", md: "50%" }}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Container
             pb="10px"
@@ -195,7 +195,12 @@ function TicketForm() {
                     rules={{ required: true }}
                     render={({ field: { name, value, onChange, onBlur } }) => (
                       <FormControl isInvalid={Boolean(errors[name])}>
-                        <FormLabel>ปัญหาที่พบ</FormLabel>
+                        <FormLabel>
+                          <Flex>
+                            <Box>ปัญหาที่พบ</Box>
+                            <Text color={"red"}>*</Text>
+                          </Flex>
+                        </FormLabel>
                         <Input
                           placeholder="ระบุปัญหาที่พบ"
                           value={value}
@@ -215,7 +220,12 @@ function TicketForm() {
                     rules={{ required: true }}
                     render={({ field: { name, value, onChange, onBlur } }) => (
                       <FormControl isInvalid={Boolean(errors[name])}>
-                        <FormLabel>รายละเอียด</FormLabel>
+                        <FormLabel>
+                          <Flex>
+                            <Box>รายละเอียด</Box>
+                            <Text color={"red"}>*</Text>
+                          </Flex>
+                        </FormLabel>
                         <Textarea
                           value={value}
                           onChange={onChange}
@@ -353,13 +363,23 @@ function TicketForm() {
                           bg="#FAFCFE"
                           _hover={{ opacity: "0.9" }}
                         >
-                          <Flex color="#4C7BF4" fontSize={{base:"2.5rem",md:"3rem"}}>
+                          <Flex
+                            color="#4C7BF4"
+                            fontSize={{ base: "2.5rem", md: "3rem" }}
+                          >
                             <MdUpload />
                           </Flex>
-                          <Text color="#4C7BF4" fontWeight="bold" fontSize={{base:"12px",md:"16px"}}>
+                          <Text
+                            color="#4C7BF4"
+                            fontWeight="bold"
+                            fontSize={{ base: "12px", md: "16px" }}
+                          >
                             คลิกเพื่ออัพโหลดไฟล์
                           </Text>
-                          <Text color="#8F9BBA" fontSize={{base:"0.5rem",md:"0.7rem"}}>
+                          <Text
+                            color="#8F9BBA"
+                            fontSize={{ base: "0.5rem", md: "0.7rem" }}
+                          >
                             PNG,JPG are allowed
                           </Text>
                         </VStack>

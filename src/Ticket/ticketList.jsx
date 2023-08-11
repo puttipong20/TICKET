@@ -247,8 +247,9 @@ function TicketList() {
           <Button
             mx={2}
             onClick={() => setIsArchive(!isArchive)}
-            bg="#4C7BF4"
-            color="#fff"
+            bg={isArchive === false ? "#4C7BF4" : "#fff"}
+            color={isArchive === false ? "#fff" : "#4C7BF4" }
+            border={`1px`}
             borderRadius={"16px"}
             _hover={{opacity: 1}}
           >
