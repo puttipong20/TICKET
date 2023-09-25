@@ -62,13 +62,17 @@ function TicketList() {
       // accessor: 'RepStatus',
       extra: (data, row) => (
         <Center>
-          <Menu placement={'bottom-start'}> 
+          <Menu placement={"bottom-end"}>
             <MenuButton as={Button} borderRadius={"16px"}>
               ...
             </MenuButton>
             <MenuList minW={"5rem"}>
               <MenuItem>
-                <AlertArchive isArchive={isArchive} fetchProject={fetchProject} docId={row.docId} />
+                <AlertArchive
+                  isArchive={isArchive}
+                  fetchProject={fetchProject}
+                  docId={row.docId}
+                />
               </MenuItem>
             </MenuList>
           </Menu>
@@ -114,7 +118,7 @@ function TicketList() {
   };
   useEffect(() => {
     fetchProject();
-  }, [refresh,firebaseId,isArchive]);
+  }, [refresh, firebaseId, isArchive]);
   const statusFilter = watch("statusFilter") || "";
   const searchRef = watch("searchRef") || "";
 
@@ -137,7 +141,7 @@ function TicketList() {
       </Heading>
       <HStack
         my="1em"
-        alignItems={'center'}
+        alignItems={"center"}
         spacing={{ base: "0px", sm: "0px", md: "10px" }}
         p={{ sm: "0px", md: "20px 20px 30px 20px" }}
         background={{ sm: "none", md: "#FFFFFF" }}
@@ -154,7 +158,7 @@ function TicketList() {
         }}
         maxW="100%"
       >
-        <Flex alignItems={'center'} mt={2}>
+        <Flex alignItems={"center"} mt={2}>
           <Controller
             name="searchRef"
             control={control}
@@ -243,15 +247,15 @@ function TicketList() {
             <AiOutlineReload />
           </Button>
         </Flex>
-        <Flex justifyContent="flex-end" alignItems={'center'} mt={2} w={'100%'}>
+        <Flex justifyContent="flex-end" alignItems={"center"} mt={2} w={"100%"}>
           <Button
             mx={2}
             onClick={() => setIsArchive(!isArchive)}
             bg={isArchive === false ? "#4C7BF4" : "#fff"}
-            color={isArchive === false ? "#fff" : "#4C7BF4" }
+            color={isArchive === false ? "#fff" : "#4C7BF4"}
             border={`1px`}
             borderRadius={"16px"}
-            _hover={{opacity: 1}}
+            _hover={{ opacity: 1 }}
           >
             <BsFillArchiveFill />
           </Button>
