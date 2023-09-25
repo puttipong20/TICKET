@@ -62,7 +62,7 @@ function TicketList() {
       // accessor: 'RepStatus',
       extra: (data, row) => (
         <Center>
-          <Menu>
+          <Menu placement={'bottom-start'}> 
             <MenuButton as={Button} borderRadius={"16px"}>
               ...
             </MenuButton>

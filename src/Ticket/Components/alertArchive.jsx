@@ -14,7 +14,7 @@ import axios from "axios";
 import React from "react";
 import { BsFillArchiveFill } from "react-icons/bs";
 
-function AlertArchive({ isArchive,docId ,fetchProject}) {
+function AlertArchive({ isArchive, docId, fetchProject }) {
   const cancelRef = React.useRef();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
@@ -26,20 +26,24 @@ function AlertArchive({ isArchive,docId ,fetchProject}) {
         "https://us-central1-crafting-ticket-dev.cloudfunctions.net/updateReport",
         {
           reportId: docId,
-          isArchive: isArchive === false? true: false,
+          isArchive: isArchive === false ? true : false,
         }
       )
       .then(() => {
         toast({
           position: "top",
-          title: isArchive === false? "จัดเก็บ": "ยกเลิกจัดเก็บ",
-          description: isArchive === false? "ปัญหารายการนี้ถูกจัดเก็บเรียบร้อยแล้ว": "ปัญหารายการนี้ถูกยกเลิกจัดเก็บแล้ว",
+          title: isArchive === false ? "จัดเก็บ" : "ยกเลิกจัดเก็บ",
+          description:
+            isArchive === false
+              ? "ปัญหารายการนี้ถูกจัดเก็บเรียบร้อยแล้ว"
+              : "ปัญหารายการนี้ถูกยกเลิกจัดเก็บแล้ว",
           status: "success",
           duration: 3000,
           isClosable: true,
         });
-        fetchProject()
-      }).catch((e) => {
+        fetchProject();
+      })
+      .catch((e) => {
         toast({
           position: "top",
           title: "จัดเก็บ",
@@ -48,7 +52,7 @@ function AlertArchive({ isArchive,docId ,fetchProject}) {
           duration: 3000,
           isClosable: true,
         });
-      })
+      });
   };
   return (
     <>
@@ -59,7 +63,7 @@ function AlertArchive({ isArchive,docId ,fetchProject}) {
         justifyContent={"space-between"}
       >
         <BsFillArchiveFill />
-        {isArchive === false?"จัดเก็บ": "ยกเลิกจัดเก็บ"}
+        {isArchive === false ? "จัดเก็บ" : "ยกเลิกจัดเก็บ"}
       </Flex>
       <AlertDialog
         isOpen={isOpen}
@@ -67,23 +71,42 @@ function AlertArchive({ isArchive,docId ,fetchProject}) {
         onClose={onClose}
       >
         <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+          <AlertDialogContent borderRadius={"16px"}>
+            <AlertDialogHeader
+              fontSize="lg"
+              fontWeight="bold"
+              color={"#fff"}
+              borderTopRadius={"16px"}
+              bg={"#4C7BF4"}
+            >
               จัดเก็บปัญหา
             </AlertDialogHeader>
 
-            <AlertDialogBody>{isArchive === false ? "ต้องการจัดเก็บปัญหานี้ใช่หรือไม่":"ต้องการยกเลิกจัดเก็บปัญหานี้ใช่หรือไม่"}</AlertDialogBody>
+            <AlertDialogBody>
+              {isArchive === false
+                ? "ต้องการจัดเก็บปัญหานี้ใช่หรือไม่"
+                : "ต้องการยกเลิกจัดเก็บปัญหานี้ใช่หรือไม่"}
+            </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button bg={"#fff"} ref={cancelRef} onClick={onClose}>
+              <Button
+                bg={"#fff"}
+                ref={cancelRef}
+                onClick={onClose}
+                borderRadius={"10px"}
+                _hover={{ opacity: 1 }}
+              >
                 ยกเลิก
               </Button>
               <Button
-                colorScheme="orange"
                 onClick={() => Archive(docId)}
                 ml={3}
+                bg={"#4C7BF4"}
+                color={"#fff"}
+                borderRadius={"10px"}
+                _hover={{ opacity: 1 }}
               >
-                {isArchive === false? "จัดเก็บ":"ยกเลิกจัดเก็บ"}
+                {isArchive === false ? "จัดเก็บ" : "ยกเลิกจัดเก็บ"}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>

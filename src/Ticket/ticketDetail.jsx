@@ -25,7 +25,7 @@ import { useAppContext } from "../Context/AppContext";
 export default function TicketDetail() {
   const navigate = useNavigate();
   const { report } = useTicketContext();
-  const {user} = useAppContext();
+  const { user } = useAppContext();
   const goBack = () => {
     navigate(-1);
   };
@@ -69,7 +69,13 @@ export default function TicketDetail() {
 
   return (
     <Box p="1rem">
-      <Button onClick={goBack} borderRadius={"16px"}>
+      <Button
+        onClick={goBack}
+        borderRadius={"16px"}
+        bg="#4C7BF4"
+        color={"#fff"}
+        _hover={{ color: "#4C7BF4", bg: "#fff" }}
+      >
         <Text>
           <ChevronLeftIcon />
           รวมรายการปัญหา
@@ -91,6 +97,7 @@ export default function TicketDetail() {
               mb="1rem"
               h="100%"
               border="1px solid rgb(0,0,0,0.1)"
+              borderRadius="16px"
             >
               <CardHeader p="0.75rem" bg="#4C7BF4" color="#fff">
                 <Heading
@@ -196,8 +203,8 @@ export default function TicketDetail() {
                       รูปภาพเพิ่มเติม
                     </Text>
                     <Grid
-                    mt={'5'}
-                    m={'auto'}
+                      mt={"5"}
+                      m={"auto"}
                       templateColumns={{
                         sm: "repeat(1,1fr)",
                         md: "repeat(3,1fr)",
@@ -218,6 +225,7 @@ export default function TicketDetail() {
             <Card
               maxH="100%"
               overflowY="auto"
+              borderRadius="16px"
               h="100%"
               border="1px solid rgb(0,0,0,0.1)"
             >
