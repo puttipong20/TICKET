@@ -75,7 +75,7 @@ export default function TicketEdit({ data }) {
     }
     await axios
       .post(
-        'https://us-central1-crafting-ticket-dev.cloudfunctions.net/updateReport',
+        'https://us-central1-craftinglab-dev.cloudfunctions.net/updateReport',
         {
           reportId: oldData.docId,
           title: dataSubmit.title,

@@ -100,7 +100,7 @@ function TicketList() {
     if (firebaseId !== undefined) {
       await axios
         .post(
-          "https://us-central1-crafting-ticket-dev.cloudfunctions.net/getReport_v2",
+          "https://us-central1-craftinglab-dev.cloudfunctions.net/getReport_v2",
           { firebaseID: firebaseId }
         )
         .then((res) => {

@@ -74,7 +74,7 @@ function TicketForm() {
     try {
       await axios
         .post(
-          "https://us-central1-crafting-ticket-dev.cloudfunctions.net/addReport_v2",
+          "https://us-central1-craftinglab-dev.cloudfunctions.net/addReport_v2",
           datas
         )
         .then((res) => {
