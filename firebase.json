@@ -1,14 +1,20 @@
 {
-  "hosting": {
-    "site":"craftinglab-ticket-dev",
-    "source": ".",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "frameworksBackend": {
-      "region": "us-central1"
+  "hosting": [
+    {
+      "site": "crafting-ticket-dev",
+      "source": ".",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "frameworksBackend": {
+        "region": "us-central1"
+      }
+    },
+    {
+      "site": "craftinglab-ticket-dev",
+      "source": ".",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "frameworksBackend": {
+        "region": "us-central1"
+      }
     }
-  }
+  ]
 }

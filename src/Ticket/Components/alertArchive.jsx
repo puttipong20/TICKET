@@ -23,7 +23,8 @@ function AlertArchive({ isArchive, docId, fetchProject }) {
     onClose();
     axios
       .post(
-        "https://us-central1-craftinglab-dev.cloudfunctions.net/updateReport",
+        "https://us-central1-crafting-ticket-dev.cloudfunctions.net/updateReport",
+        // "https://us-central1-craftinglab-dev.cloudfunctions.net/updateReport", //prod
         {
           reportId: docId,
           isArchive: isArchive === false ? true : false,

@@ -37,7 +37,7 @@ function TicketList() {
   const [isFetching, setIsFetching] = useState(false);
   const [isArchive, setIsArchive] = useState(false);
   const { control, watch } = useForm();
-  const { firebaseId } = useTicketContext();
+  const { firebaseId,setReport } = useTicketContext();
   const navigate = useNavigate();
   const columnsHeader = [
     {
@@ -100,10 +100,12 @@ function TicketList() {
     if (firebaseId !== undefined) {
       await axios
         .post(
-          "https://us-central1-craftinglab-dev.cloudfunctions.net/getReport_v2",
+          "https://us-central1-crafting-ticket-dev.cloudfunctions.net/getReport_v2",
+          // "https://us-central1-craftinglab-dev.cloudfunctions.net/getReport_v2", //prod
           { firebaseID: firebaseId }
         )
         .then((res) => {
+          setReport(res.data)
           const allReport = res.data;
           const sortData = allReport.sort((a, b) => {
             const dateA = new Date(a.createAt);
