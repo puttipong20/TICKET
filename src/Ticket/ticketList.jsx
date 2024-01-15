@@ -100,12 +100,12 @@ function TicketList() {
     if (firebaseId !== undefined) {
       await axios
         .post(
-          "https://us-central1-crafting-ticket-dev.cloudfunctions.net/getReport_v2",
+          // "https://us-central1-crafting-ticket-dev.cloudfunctions.net/getReport_v2",
           // "https://us-central1-craftinglab-dev.cloudfunctions.net/getReport_v2", //prod
+          "http://127.0.0.1:5001/final-project-661cd/us-central1/getReport_v2",
           { firebaseID: firebaseId }
         )
         .then((res) => {
-          setReport(res.data)
           const allReport = res.data;
           const sortData = allReport.sort((a, b) => {
             const dateA = new Date(a.createAt);

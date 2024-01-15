@@ -38,7 +38,7 @@ function TicketForm() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const toast = useToast();
-  const { firebaseId,report } = useTicketContext();
+  const { firebaseId } = useTicketContext();
   const formattedDate = moment().format("YYYY-MM-DD HH:mm:ss");
 
   const handleClose = () => {
@@ -70,13 +70,15 @@ function TicketForm() {
       },
       RepImg: allImgUpload,
       firebaseId: firebaseId,
-      projectId: report[0].projectId
     };
     try {
+      console.log(datas)
       await axios
         .post(
-          "https://us-central1-crafting-ticket-dev.cloudfunctions.net/addReport_v2",
+          // "http://127.0.0.1:5001/crafting-ticket-dev/us-central1/addReport_v2",
+          // "https://us-central1-crafting-ticket-dev.cloudfunctions.net/addReport_v2", //dev
           // "https://us-central1-craftinglab-dev.cloudfunctions.net/addReport_v2",// prod
+          "http://127.0.0.1:5001/final-project-661cd/us-central1/addReport_v2",
           datas
         )
         .then((res) => {
