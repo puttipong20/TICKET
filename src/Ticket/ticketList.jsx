@@ -37,7 +37,7 @@ function TicketList() {
   const [isFetching, setIsFetching] = useState(false);
   const [isArchive, setIsArchive] = useState(false);
   const { control, watch } = useForm();
-  const { firebaseId,setReport } = useTicketContext();
+  const { firebaseId, setReport } = useTicketContext();
   const navigate = useNavigate();
   const columnsHeader = [
     {
@@ -97,12 +97,13 @@ function TicketList() {
 
   const fetchProject = async () => {
     setIsFetching(true);
+    firebaseId;
     if (firebaseId !== undefined) {
       await axios
         .post(
           // "https://us-central1-crafting-ticket-dev.cloudfunctions.net/getReport_v2",
           // "https://us-central1-craftinglab-dev.cloudfunctions.net/getReport_v2", //prod
-          "http://127.0.0.1:5001/final-project-661cd/us-central1/getReport_v2",
+          "http://127.0.0.1:5001/present-project-cecd4/us-central1/getReport_v2",
           { firebaseID: firebaseId }
         )
         .then((res) => {

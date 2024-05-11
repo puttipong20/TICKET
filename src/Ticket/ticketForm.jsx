@@ -72,13 +72,12 @@ function TicketForm() {
       firebaseId: firebaseId,
     };
     try {
-      console.log(datas)
       await axios
         .post(
           // "http://127.0.0.1:5001/crafting-ticket-dev/us-central1/addReport_v2",
           // "https://us-central1-crafting-ticket-dev.cloudfunctions.net/addReport_v2", //dev
           // "https://us-central1-craftinglab-dev.cloudfunctions.net/addReport_v2",// prod
-          "http://127.0.0.1:5001/final-project-661cd/us-central1/addReport_v2",
+          "http://127.0.0.1:5001/present-project-cecd4/us-central1/addReport_v2",
           datas
         )
         .then((res) => {
